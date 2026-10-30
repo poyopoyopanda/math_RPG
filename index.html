@@ -78,6 +78,52 @@ body{
 #equation-rpg button{border:1px solid #465773;background:#26354d;color:#f5f8ff;border-radius:9px;padding:9px 12px;cursor:pointer}#equation-rpg button:hover{filter:brightness(1.15)}#equation-rpg button:disabled{opacity:.42;cursor:not-allowed}
 #equation-rpg .nav{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}#equation-rpg .nav button.active{background:#6d5ce8;border-color:#a89cff}
 #equation-rpg .panel{background:#182439;border:1px solid #31415c;border-radius:12px;padding:13px;margin:10px 0}#equation-rpg .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}#equation-rpg .stat{background:#202f47;padding:10px;border-radius:9px}#equation-rpg .muted{color:#aab9d2;font-size:.9em}#equation-rpg .bar{height:10px;background:#0b1220;border-radius:99px;overflow:hidden;margin:6px 0 10px}#equation-rpg .bar>i{display:block;height:100%;background:linear-gradient(90deg,#46d6c6,#648bff);width:0%;transition:width .2s}#equation-rpg .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}#equation-rpg .grow{flex:1}#equation-rpg .notice{min-height:24px;color:#ffd98c;margin:8px 0}#equation-rpg .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}#equation-rpg .card{background:#202f47;border:1px solid #3b4c68;border-radius:10px;padding:12px}#equation-rpg .card h3{font-size:1em}#equation-rpg .good{color:#7ce4b2}#equation-rpg .bad{color:#ff9b9b}#equation-rpg .enemy{font-size:1.15em;font-weight:700}#equation-rpg input[type=text],#equation-rpg input[type=number]{background:#0d1523;color:#fff;border:1px solid #53647e;border-radius:8px;padding:10px;min-width:0;max-width:100%}#equation-rpg .factory{display:flex;flex-wrap:wrap;align-items:end;gap:8px;min-height:115px;padding:12px;background:#0d1523;border-radius:10px;overflow:hidden}#equation-rpg .factoryBar{width:30px;min-width:18px;border-radius:6px 6px 2px 2px;position:relative;box-shadow:0 0 12px #ffffff12;border:1px solid #ffffff35;transition:height .2s}#equation-rpg .factoryBar span{position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);font-size:10px;color:#d8e4ff;white-space:nowrap}#equation-rpg .factoryBar.base{background:linear-gradient(#7be6ff,#3279d8)}#equation-rpg .factoryBar.advanced{background:linear-gradient(#e1a4ff,#8556d9)}#equation-rpg .factoryBar.elite{background:linear-gradient(#ffe49b,#e28a32)}#equation-rpg .factoryBar.mythic{background:linear-gradient(#ff9fbd,#e84b79)}#equation-rpg .treeWrap{height:520px;position:relative;overflow:hidden;background:#0b1322;border:1px solid #35435b;border-radius:12px;touch-action:none}#equation-rpg #treeSvg{width:100%;height:100%;display:block;cursor:grab;user-select:none}#equation-rpg #treeSvg.dragging{cursor:grabbing}#equation-rpg .treeControls{position:absolute;top:8px;right:8px;display:flex;gap:5px;z-index:2}#equation-rpg .treeControls button{padding:6px 10px;background:#26354ddd}#equation-rpg .treeLegend{display:flex;gap:10px;flex-wrap:wrap;font-size:.82em;color:#bdc9dd;margin:8px 0}#equation-rpg .legendDot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}#equation-rpg .small{font-size:.86em}#equation-rpg .battleActions{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}#equation-rpg .danger{border-color:#8b4d60!important}#equation-rpg .center{text-align:center}#equation-rpg .footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px}
+#equation-rpg #treeWrap{
+  position:relative;
+}
+
+#equation-rpg #nodeInfo{
+  display:none;
+  position:absolute;
+  z-index:5;
+  width:280px;
+  max-width:calc(100% - 16px);
+  background:#263650;
+  border:1px solid #8ba8d8;
+  border-radius:12px;
+  padding:14px;
+  box-shadow:0 8px 24px #0009;
+  color:#edf3ff;
+}
+
+#equation-rpg #nodeInfo:before{
+  content:"";
+  position:absolute;
+  top:-9px;
+  left:28px;
+  width:16px;
+  height:16px;
+  background:#263650;
+  border-left:1px solid #8ba8d8;
+  border-top:1px solid #8ba8d8;
+  transform:rotate(45deg);
+}
+
+#equation-rpg #nodeInfo h3{
+  margin:0 24px 10px 0;
+}
+
+#equation-rpg #nodeInfo p{
+  margin:7px 0;
+  font-size:.9em;
+}
+
+#equation-rpg #nodeInfo .nodeClose{
+  position:absolute;
+  top:7px;
+  right:7px;
+  padding:3px 9px;
+}
 @media(max-width:600px){
 
   #equation-rpg{
@@ -293,6 +339,43 @@ body::after {
     animation: none;
   }
 }
+  /* スマホ縦画面向けの自動拡大 */
+@media screen and (max-width:600px) and (orientation:portrait){
+  #equation-rpg{
+    width:100%;
+    max-width:none;
+    padding:12px;
+    border-radius:0;
+    font-size:clamp(16px,4.4vw,19px);
+  }
+
+  #equation-rpg h2{
+    font-size:1.5em;
+  }
+
+  #equation-rpg h3{
+    font-size:1.15em;
+  }
+
+  #equation-rpg button{
+    min-height:44px;
+    padding:10px 13px;
+  }
+
+  #equation-rpg input,
+  #equation-rpg select{
+    font-size:16px;
+    min-height:44px;
+  }
+
+  #equation-rpg .stat{
+    padding:12px;
+  }
+
+  #equation-rpg .panel{
+    padding:12px;
+  }
+}
 </style>
 <div class="gameHeader">
   <h2>⚔️ 方程式バトルRPG</h2>
@@ -364,8 +447,8 @@ const enemies=[
  {id:'dragon',name:'ドラゴン',lv:60,hp:700,atk:35,exp:300,gold:200},
  {id:'demon',name:'魔王',lv:100,hp:1600,atk:55,exp:700,gold:500}
 ];
-const fresh=()=>({lv:1,exp:0,hp:100,mp:30,num:0,gold:150,materials:0,bars:[],nextBarId:1,wins:0,rebirth:0,points:0,skills:[],milestones:[],inventory:{},ownedGear:[],equippedGear:{weapon:null,armor:null,exp:null,mana:null},zeroStartApplied:true,last:Date.now(),treeUnlocked:['0,0'],treeSeen:[],maxSeenRadius:4});
-function load(){let x=null;try{x=JSON.parse(localStorage.getItem(STORAGE))||JSON.parse(localStorage.getItem(previousStorage))||JSON.parse(localStorage.getItem(olderStorage))||JSON.parse(localStorage.getItem(oldestStorage))}catch(e){};const needsZeroReset=!!x&&!Object.prototype.hasOwnProperty.call(x,'zeroStartApplied');let p=x||fresh();const d=fresh();for(const k in d)if(p[k]===undefined)p[k]=d[k];if(!Array.isArray(p.bars))p.bars=[];if(!Array.isArray(p.treeUnlocked)||!p.treeUnlocked.length)p.treeUnlocked=['0,0'];if(!Array.isArray(p.treeSeen))p.treeSeen=[];if(!p.inventory||typeof p.inventory!=='object')p.inventory={};if(!Array.isArray(p.ownedGear))p.ownedGear=[];if(!p.equippedGear||typeof p.equippedGear!=='object')p.equippedGear={weapon:null,armor:null,exp:null,mana:null};for(const slot of ['weapon','armor','exp','mana'])if(p.equippedGear[slot]===undefined)p.equippedGear[slot]=null;p.materials=Math.max(0,Number(p.materials)||0);/* 旧セーブからの移行時に、初期数字だけを一度0へ補正する。以後は通常の進行を保持する。 */if(needsZeroReset)p.num=0;p.zeroStartApplied=true;return p}
+const fresh=()=>({lv:1,exp:0,hp:100,mp:30,num:0,gold:150,materials:0,bars:[],nextBarId:1,wins:0,rebirth:0,points:0,skills:[],milestones:[],inventory:{},ownedGear:[],equippedGear:{weapon:null,armor:null,exp:null,mana:null},spells:[],zeroStartApplied:true,last:Date.now(),treeUnlocked:['0,0'],treeSeen:[],maxSeenRadius:4});
+function load(){let x=null;try{x=JSON.parse(localStorage.getItem(STORAGE))||JSON.parse(localStorage.getItem(previousStorage))||JSON.parse(localStorage.getItem(olderStorage))||JSON.parse(localStorage.getItem(oldestStorage))}catch(e){};const needsZeroReset=!!x&&!Object.prototype.hasOwnProperty.call(x,'zeroStartApplied');let p=x||fresh();const d=fresh();if(!Array.isArray(p.spells))p.spells=[];for(const k in d)if(p[k]===undefined)p[k]=d[k];if(!Array.isArray(p.bars))p.bars=[];if(!Array.isArray(p.spells))p.spells=[];if(!Array.isArray(p.treeUnlocked)||!p.treeUnlocked.length)p.treeUnlocked=['0,0'];if(!Array.isArray(p.treeSeen))p.treeSeen=[];if(!p.inventory||typeof p.inventory!=='object')p.inventory={};if(!Array.isArray(p.ownedGear))p.ownedGear=[];if(!p.equippedGear||typeof p.equippedGear!=='object')p.equippedGear={weapon:null,armor:null,exp:null,mana:null};for(const slot of ['weapon','armor','exp','mana'])if(p.equippedGear[slot]===undefined)p.equippedGear[slot]=null;p.materials=Math.max(0,Number(p.materials)||0);/* 旧セーブからの移行時に、初期数字だけを一度0へ補正する。以後は通常の進行を保持する。 */if(needsZeroReset)p.num=0;p.zeroStartApplied=true;return p}
 let p=load(),page='home',enemy=null,enemyHP=0,q=null,noticeText='',noticeTimer=null,treeScale=1,treePan={x:0,y:0},drag=null,battleSettings={difficulty:'normal',category:'random'};
 const fmt=n=>Number(n||0).toLocaleString('ja-JP',{maximumFractionDigits:1});
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -374,6 +457,22 @@ const needNum=()=>Math.floor(100*Math.pow(p.lv,1.7));
 const maxHP=()=>100+(p.lv-1)*8+p.rebirth*25;
 const maxMP=()=>30+Math.floor((p.lv-1)*1.4)+p.rebirth*5;
 const skillBonus=(type)=>{let v=0;for(const id of p.treeUnlocked){const n=parseNodeId(id);if(!n||id==='0,0')continue;const info=nodeInfo(n.q,n.r);if(info.type===type)v+=info.value}return v};
+const spellBonus=type=>{
+  let v=0;
+
+  for(const id of p.treeUnlocked){
+    const n=parseNodeId(id);
+    if(!n)continue;
+
+    const info=nodeInfo(n.q,n.r);
+
+    if(info.spellUpgrade===type){
+      v+=info.upgradeValue||0;
+    }
+  }
+
+  return v;
+};
 const milestoneBonus=(type)=>({idle:p.lv>=75?.35:p.lv>=10?.1:0,exp:p.lv>=100?.30:p.lv>=25?.15:0,power:p.lv>=50?.15:0}[type]||0);
 const tierInfo=[{name:'基礎バー',cls:'base',base:.35,cost:5},{name:'強化バー',cls:'advanced',base:2.5,cost:250},{name:'精鋭バー',cls:'elite',base:15,cost:5000},{name:'神話バー',cls:'mythic',base:90,cost:100000}];
 const passiveRate=()=>.25;
@@ -400,14 +499,28 @@ const expMult=()=>1+skillBonus('exp')+milestoneBonus('exp')+p.rebirth*.05+gearEx
 const powerMult=()=>1+skillBonus('power')+milestoneBonus('power')+p.rebirth*.08;
 const damageMult=()=>powerMult()+gearDamageBonus();
 const incomingDamage=()=>Math.max(1,Math.floor(enemy.atk*(1-gearDefenseBonus())/(1+skillBonus('defense')*5)));
-const spellCost=type=>Math.max(1,Math.ceil(({fire:8,ice:6,thunder:15,heal:10}[type])/(1+skillBonus('magic')*4))-gearMPCut());
+const spellCost=type=>{
+  const costs={
+    fire:8,
+    ice:6,
+    thunder:15,
+    heal:10,
+    wind:7,
+    barrier:9
+  };
+
+  return Math.max(
+    1,
+    Math.ceil((costs[type]||10)/(1+skillBonus('magic')*4))-gearMPCut()
+  );
+};
 function save(markTime=false){if(markTime)p.last=Date.now();try{localStorage.setItem(STORAGE,JSON.stringify(p))}catch(e){} }
 function notify(t){noticeText=t;$('notice').textContent=t;if(noticeTimer)clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>{$('notice').textContent=''},4200)}
 function levelCheck(){let up=0,got=0;while(p.exp>=needExp()&&p.num>=needNum()&&p.lv<9999){p.exp-=needExp();p.num-=needNum();p.lv++;let materialGain=1+Math.floor(p.lv/10);p.materials+=materialGain;got+=materialGain;p.hp=Math.min(maxHP(),p.hp+18);p.mp=Math.min(maxMP(),p.mp+8);up++}if(up)notify(`レベルアップ！ Lv.${p.lv}。素材 +${got}（合計 ${p.materials}）`);p.hp=clamp(p.hp,0,maxHP());p.mp=clamp(p.mp,0,maxMP())}
-function nav(){const items=[['home','🏠 ホーム'],['battle','⚔️ 戦闘'],['numbers','📊 数字生産'],['shop','🛒 ショップ'],['skills','🕸️ スキル網'],['rebirth','♻️ 転生']];$('nav').innerHTML=items.map(([id,t])=>`<button data-page="${id}" class="${page===id?'active':''}">${t}</button>`).join('');$('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{page=b.dataset.page;render()})}
+function nav(){const items=[['home','🏠 ホーム'],['battle','⚔️ 戦闘'],['numbers','📊 数字生産'],['shop','🛒 ショップ'],['skills','🕸️ スキルツリー'],['rebirth','♻️ 転生']];$('nav').innerHTML=items.map(([id,t])=>`<button data-page="${id}" class="${page===id?'active':''}">${t}</button>`).join('');$('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{page=b.dataset.page;render()})}
 function topStats(){$('topStats').innerHTML=`<div class="stat"><span class="muted">レベル</span><br><b>Lv.${p.lv}</b></div><div class="stat"><span class="muted">HP</span><br><b>${fmt(p.hp)} / ${fmt(maxHP())}</b></div><div class="stat"><span class="muted">MP</span><br><b>${fmt(p.mp)} / ${fmt(maxMP())}</b></div><div class="stat"><span class="muted">所持数字</span><br><b>${fmt(p.num)}</b></div><div class="stat"><span class="muted">素材</span><br><b>💠 ${fmt(p.materials)}</b></div><div class="stat"><span class="muted">ゴールド</span><br><b>🪙 ${fmt(p.gold)}</b></div><div class="stat"><span class="muted">毎秒生産</span><br><b>+${fmt(rate())}/秒</b></div>`}
 function home(){let ex=needExp(),nu=needNum();return `<div class="panel"><h3>冒険者ステータス</h3><div id="expLabel">経験値：${fmt(p.exp)} / ${fmt(ex)}</div><div class="bar"><i id="expProgress" style="width:${clamp(p.exp/ex*100,0,100)}%"></i></div><div id="numLabel">次のレベルに必要な数字：${fmt(nu)}</div><div class="bar"><i id="numProgress" style="width:${clamp(p.num/nu*100,0,100)}%"></i></div><div class="muted">
-レベルアップには経験値と数字の両方が必要です。初期所持数字は0。初回開始時は数字0・ゴールド150。バー購入前は低速の基礎生産だけが動きます。レベルアップ時にはスキル網の高位ノードに使う素材も獲得します。</div><div class="row" style="margin-top:12px"><button id="openTutorial">📖 操作説明を見る</button></div><div class="panel"><h3>🏭 数字生産ライン</h3><div class="factory">${p.bars.slice(0,80).map(b=>{let t=tierInfo[clamp(b.tier,0,3)];return `<div class="factoryBar ${t.cls}" style="height:${clamp(25+b.level*8+b.tier*12,30,95)}px"><span>Lv${b.level}</span></div>`}).join('')||'バーがありません'}</div><p>稼働中：${p.bars.length} 本 / 生産：+${fmt(rate())} 数字/秒</p><button data-go="numbers">バーを購入・強化</button></div><div class="panel"><h3>📜 冒険の記録</h3><div>勝利数：${p.wins}　転生回数：${p.rebirth}　スキル網の解放数：${p.treeUnlocked.length}</div><p class="muted">敵を倒して経験値とゴールドを獲得し、スキル網を広げて強化しよう。</p><button data-go="battle">戦闘へ進む</button></div>`}
+レベルアップには経験値と数字の両方が必要です。初期所持数字は0。初回開始時は数字0・ゴールド150。バー購入前は低速の基礎生産だけが動きます。レベルアップ時にはスキルツリーの高位ノードに使う素材も獲得します。</div><div class="row" style="margin-top:12px"><button id="openTutorial">📖 操作説明を見る</button></div><div class="panel"><h3>🏭 数字生産ライン</h3><div class="factory">${p.bars.slice(0,80).map(b=>{let t=tierInfo[clamp(b.tier,0,3)];return `<div class="factoryBar ${t.cls}" style="height:${clamp(25+b.level*8+b.tier*12,30,95)}px"><span>Lv${b.level}</span></div>`}).join('')||'バーがありません'}</div><p>稼働中：${p.bars.length} 本 / 生産：+${fmt(rate())} 数字/秒</p><button data-go="numbers">バーを購入・強化</button></div><div class="panel"><h3>📜 冒険の記録</h3><div>勝利数：${p.wins}　転生回数：${p.rebirth}　スキル網の解放数：${p.treeUnlocked.length}</div><p class="muted">敵を倒して経験値とゴールドを獲得し、スキル網を広げて強化しよう。</p><button data-go="battle">戦闘へ進む</button></div>`}
  let tutorialPage=0;
 
 const tutorialContents=[
@@ -591,7 +704,226 @@ const dirs=[[1,0],[0,1],[-1,1],[-1,0],[0,-1],[1,-1]];
 function parseNodeId(id){let a=String(id).split(',').map(Number);return a.length===2&&a.every(Number.isFinite)?{q:a[0],r:a[1]}:null}
 function nodeId(q,r){return `${q},${r}`}
 function distance(q,r){return (Math.abs(q)+Math.abs(r)+Math.abs(q+r))/2}
-function nodeInfo(q,r){let d=distance(q,r);let types=['idle','power','exp','defense','magic'];let idx=((q*7+r*11)%types.length+types.length)%types.length;let type=d===0?'root':types[idx];let values={idle:.06,power:.05,exp:.06,defense:.04,magic:.04};let names={root:'起点',idle:'数字生産',power:'魔法威力',exp:'経験値',defense:'耐久力',magic:'魔力効率'};let icons={root:'✦',idle:'▰',power:'⚡',exp:'✧',defense:'⬡',magic:'◈'};let baseCost=d===0?0:Math.floor(120*Math.pow(1.48,d));let reqLv=d>=6?d*5:1;let reqMat=d>=6?Math.ceil((d-4)/2):0;return {d,type,value:values[type]||0,name:names[type]||'スキル',icon:icons[type]||'◇',cost:baseCost,reqLv,reqMat,desc:{root:'スキル網の起点。ここから隣接ノードを解放できます。',idle:'数字生産量 +6%',power:'攻撃魔法の威力 +5%',exp:'獲得経験値 +6%',defense:'戦闘で受けるダメージを軽減（最大効果は上限あり）',magic:'魔法の消費MPを少し軽減'}[type]}}
+function nodeInfo(q,r){
+  const d=distance(q,r);
+
+  function selectNode(id,nodeElement){
+  const z=parseNodeId(id);
+  if(!z)return;
+
+  const info=nodeInfo(z.q,z.r);
+  const un=isUnlocked(id);
+  const avail=!un&&adjacentUnlocked(z.q,z.r);
+
+  const canLevel=p.lv>=info.reqLv;
+  const canMat=p.materials>=info.reqMat;
+  const canBuy=p.num>=info.cost;
+
+  const box=$('nodeInfo');
+  if(!box)return;
+
+  let req=`
+    <p>距離：${info.d}</p>
+    <p>必要数字：${fmt(info.cost)}</p>
+  `;
+
+  if(info.reqLv>1||info.reqMat>0){
+    req+=`
+      <p>必要レベル：Lv.${info.reqLv}</p>
+      <p>必要素材：💠 ${info.reqMat} 個（所持 ${p.materials}）</p>
+    `;
+  }
+
+  let effect='';
+
+  if(info.spell){
+    effect=`<p class="good">魔法習得：${info.name}</p>`;
+  }else if(info.spellUpgrade){
+    effect=`
+      <p class="good">強化対象：${info.spellUpgrade}</p>
+      <p>強化量：+${Math.round(info.upgradeValue*100)}%</p>
+    `;
+  }else if(info.type==='root'){
+    effect='<p>スキルツリーの起点です。</p>';
+  }else{
+    effect=`<p>効果：${info.desc}</p>`;
+  }
+
+  let button='';
+
+  if(un){
+    button='<p class="good">✓ 解放済み</p>';
+  }else if(!avail){
+    button='<p class="muted">隣接するノードを先に解放してください。</p>';
+  }else{
+    const disabled=!canBuy||!canLevel||!canMat;
+
+    const label=!canBuy?'数字不足':
+      !canLevel?'レベル不足':
+      !canMat?'素材不足':'ノードを解放';
+
+    button=`
+      <button id="unlockNode" ${disabled?'disabled':''}>
+        ${label}
+      </button>
+    `;
+  }
+
+  box.innerHTML=`
+    <button class="nodeClose" id="closeNodeInfo">×</button>
+    <h3>${info.icon} ${info.name}</h3>
+    ${effect}
+    ${req}
+    ${button}
+  `;
+
+  box.style.display='block';
+
+  // 吹き出しをクリックしたノードの近くへ配置
+  const wrap=$('treeWrap');
+
+  if(nodeElement&&wrap){
+    const nr=nodeElement.getBoundingClientRect();
+    const wr=wrap.getBoundingClientRect();
+
+    const x=nr.left+nr.width/2-wr.left;
+    const y=nr.bottom-wr.top;
+
+    box.style.left=`${clamp(x-140,8,Math.max(8,wrap.clientWidth-296))}px`;
+    box.style.top=`${clamp(y+8,8,Math.max(8,wrap.clientHeight-220))}px`;
+  }
+
+  const close=$('closeNodeInfo');
+  if(close)close.onclick=()=>box.style.display='none';
+
+  const b=$('unlockNode');
+
+  if(b){
+    b.onclick=()=>{
+      if(
+        p.num<info.cost||
+        p.lv<info.reqLv||
+        p.materials<info.reqMat||
+        !adjacentUnlocked(z.q,z.r)||
+        isUnlocked(id)
+      )return;
+
+      p.num-=info.cost;
+      p.materials-=info.reqMat;
+      p.treeUnlocked.push(id);
+
+      // 魔法習得
+      if(info.spell&&!p.spells.includes(info.spell)){
+        p.spells.push(info.spell);
+      }
+
+      if(info.type==='defense'){
+        p.hp=Math.min(maxHP(),p.hp+10);
+      }
+
+      save();
+      treeRender();
+      selectNode(id);
+      topStats();
+
+      notify(`${info.name}ノードを解放！`);
+    };
+  }
+}
+  const upgradeNodes={
+    '2,0':{
+      type:'upgrade_fire',name:'火炎強化',icon:'🔥',
+      spellUpgrade:'fire',value:.15,
+      desc:'火炎魔法の威力 +15%。'
+    },
+    '0,2':{
+      type:'upgrade_heal',name:'回復強化',icon:'💚',
+      spellUpgrade:'heal',value:.15,
+      desc:'回復魔法の回復量 +15%。'
+    },
+    '-2,2':{
+      type:'upgrade_ice',name:'氷結強化',icon:'❄️',
+      spellUpgrade:'ice',value:.15,
+      desc:'氷結魔法の威力 +15%。'
+    },
+    '-2,0':{
+      type:'upgrade_thunder',name:'雷鳴強化',icon:'⚡',
+      spellUpgrade:'thunder',value:.15,
+      desc:'雷鳴魔法の威力 +15%。'
+    },
+    '0,-2':{
+      type:'upgrade_wind',name:'風刃強化',icon:'🌪️',
+      spellUpgrade:'wind',value:.15,
+      desc:'風刃魔法の威力 +15%。'
+    },
+    '2,-2':{
+      type:'upgrade_barrier',name:'障壁強化',icon:'🛡️',
+      spellUpgrade:'barrier',value:.15,
+      desc:'魔力障壁のダメージ軽減率を強化。'
+    }
+  };
+
+  const special=spellNodes[`${q},${r}`];
+  const upgrade=upgradeNodes[`${q},${r}`];
+  const cost=Math.floor(120*Math.pow(1.48,d));
+  const reqLv=d>=6?d*5:1;
+  const reqMat=d>=6?Math.ceil((d-4)/2):0;
+
+  if(special){
+    return {
+      d,type:special.type,value:0,
+      name:special.name,icon:special.icon,
+      spell:special.spell,
+      cost,reqLv,reqMat,desc:special.desc
+    };
+  }
+
+  if(upgrade){
+    return {
+      d,type:upgrade.type,value:0,
+      name:upgrade.name,icon:upgrade.icon,
+      spellUpgrade:upgrade.spellUpgrade,
+      upgradeValue:upgrade.value,
+      cost,reqLv,reqMat,desc:upgrade.desc
+    };
+  }
+
+  const types=['idle','power','exp','defense','magic'];
+  const idx=((q*7+r*11)%types.length+types.length)%types.length;
+  const type=d===0?'root':types[idx];
+
+  const values={
+    idle:.06,power:.05,exp:.06,
+    defense:.04,magic:.04
+  };
+
+  const names={
+    root:'起点',idle:'数字生産',power:'魔法威力',
+    exp:'経験値',defense:'耐久力',magic:'魔力効率'
+  };
+
+  const icons={
+    root:'✦',idle:'▰',power:'⚡',
+    exp:'✧',defense:'⬡',magic:'◈'
+  };
+
+  const desc={
+    root:'スキルツリーの起点。ここから隣接ノードを解放できます。',
+    idle:'数字生産量 +6%',
+    power:'攻撃魔法の威力 +5%',
+    exp:'獲得経験値 +6%',
+    defense:'戦闘で受けるダメージを軽減。',
+    magic:'魔法の消費MPを少し軽減。'
+  };
+
+  return {
+    d,type,value:values[type]||0,
+    name:names[type]||'スキル',
+    icon:icons[type]||'◇',
+    cost:d===0?0:cost,
+    reqLv,reqMat,desc:desc[type]
+  };
+}
 function isUnlocked(id){return p.treeUnlocked.includes(id)}
 function adjacentUnlocked(q,r){return dirs.some(([dq,dr])=>isUnlocked(nodeId(q+dq,r+dr)))}
 function discoveredNodes(){
@@ -600,10 +932,16 @@ const seen=new Set(['0,0']);
 for(const id of p.treeUnlocked){const z=parseNodeId(id);if(!z)continue;seen.add(id);for(const [dq,dr] of dirs)seen.add(nodeId(z.q+dq,z.r+dr));}
 return [...seen].map(parseNodeId).filter(Boolean)
 }
-function skills(){return `<div class="panel"><h3>🕸️ 拡張型スキル網</h3><p>明るいノードは解放済み、暗いノードは未解放です。解放済みノードに隣接したノードを解放すると、そこからさらに網が無制限に広がります。基本ノードは数字だけで解放できますが、起点から距離6以上の高位ノードにはプレイヤーレベルとレベルアップ素材も必要です。</p><div class="treeLegend"><span><i class="legendDot" style="background:#42d9bf"></i>数字生産</span><span><i class="legendDot" style="background:#ffad64"></i>魔法威力</span><span><i class="legendDot" style="background:#7ea7ff"></i>経験値</span><span><i class="legendDot" style="background:#b9a0ff"></i>耐久力</span><span><i class="legendDot" style="background:#ff82b2"></i>魔力効率</span></div><div class="treeWrap" id="treeWrap"><div class="treeControls"><button id="zoomOut">−</button><button id="zoomReset">中央</button><button id="zoomIn">＋</button></div><svg id="treeSvg" viewBox="0 0 1000 600" aria-label="スキルツリー"><g id="treeWorld"></g></svg></div><p class="muted">マウスホイール／＋−でズーム、ドラッグで移動。スマホ・タブレットでは指でドラッグできます。</p><div id="nodeInfo" class="card"><b>ノードを選択</b><p class="muted">ノードをクリックすると詳細が表示されます。</p></div><div class="row" style="margin-top:10px"><button id="centerTree">表示を中央に戻す</button><span class="muted">解放済み：${p.treeUnlocked.length} ノード</span></div></div>`}
+function skills(){return `<div class="panel"><h3>🕸️ 拡張型スキルツリー</h3><p>明るいノードは解放済み、暗いノードは未解放です。解放済みノードに隣接したノードを解放すると、そこからさらに網が無制限に広がります。基本ノードは数字だけで解放できますが、起点から距離6以上の高位ノードにはプレイヤーレベルとレベルアップ素材も必要です。</p><div class="treeLegend"><span><i class="legendDot" style="background:#42d9bf"></i>数字生産</span><span><i class="legendDot" style="background:#ffad64"></i>魔法威力</span><span><i class="legendDot" style="background:#7ea7ff"></i>経験値</span><span><i class="legendDot" style="background:#b9a0ff"></i>耐久力</span><span><i class="legendDot" style="background:#ff82b2"></i>魔力効率</span></div><div class="treeWrap" id="treeWrap"><div class="treeControls"><button id="zoomOut">−</button><button id="zoomReset">中央</button><button id="zoomIn">＋</button></div><svg id="treeSvg" viewBox="0 0 1000 600" aria-label="スキルツリー"><g id="treeWorld"></g></svg></div><p class="muted">マウスホイール／＋−でズーム、ドラッグで移動。スマホ・タブレットでは指でドラッグできます。</p><div id="nodeInfo" class="card"><b>ノードを選択</b><p class="muted">ノードをクリックすると詳細が表示されます。</p></div><div class="row" style="margin-top:10px"><button id="centerTree">表示を中央に戻す</button><span class="muted">解放済み：${p.treeUnlocked.length} ノード</span></div></div>`}
 function treeRender(){const svg=$('treeSvg'),world=$('treeWorld');if(!svg||!world)return;const nodes=discoveredNodes();const spacing=74,cx=500,cy=300;let lines='';const set=new Set(nodes.map(n=>nodeId(n.q,n.r)));for(const n of nodes){for(const [dq,dr] of dirs){const id2=nodeId(n.q+dq,n.r+dr);if(!set.has(id2))continue;let x1=cx+spacing*(n.q+n.r/2),y1=cy+spacing*.866*n.r,x2=cx+spacing*(n.q+dq+(n.r+dr)/2),y2=cy+spacing*.866*(n.r+dr);if(id2>nodeId(n.q,n.r))lines+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#31415c" stroke-width="3"/>`}}
 let circles='';for(const n of nodes){let id=nodeId(n.q,n.r),info=nodeInfo(n.q,n.r),un=isUnlocked(id),avail=!un&&adjacentUnlocked(n.q,n.r),x=cx+spacing*(n.q+n.r/2),y=cy+spacing*.866*n.r;let color={root:'#f8df87',idle:'#42d9bf',power:'#ffad64',exp:'#7ea7ff',defense:'#b9a0ff',magic:'#ff82b2'}[info.type]||'#9caac1';let fill=un?color:'#182439',stroke=un?'#ffffff':avail?color:'#526078',op=un?1:avail?.95:.55;circles+=`<g data-node="${id}" style="cursor:pointer;opacity:${op}"><circle cx="${x}" cy="${y}" r="${un?23:19}" fill="${fill}" fill-opacity="${un?.95:.75}" stroke="${stroke}" stroke-width="${avail?3:2}"/><text x="${x}" y="${y+5}" text-anchor="middle" font-size="17" fill="${un?'#102034':'#e6eeff'}" pointer-events="none">${info.icon}</text>${un?`<circle cx="${x+17}" cy="${y-16}" r="5" fill="#b7ffe2"/>`:''}</g>`}
-world.innerHTML=lines+circles;applyTreeTransform();world.querySelectorAll('[data-node]').forEach(g=>g.addEventListener('click',e=>{if(drag&&drag.moved)return;selectNode(g.dataset.node)}));}
+world.innerHTML=lines+circles;applyTreeTransform();world.querySelectorAll('[data-node]').forEach(g=>{
+  g.addEventListener('click',e=>{
+    if(drag&&drag.moved)return;
+    e.stopPropagation();
+    selectNode(g.dataset.node,g);
+  });
+});}
 function applyTreeTransform(){let w=$('treeWorld');if(w)w.setAttribute('transform',`translate(${treePan.x} ${treePan.y}) translate(500 300) scale(${treeScale}) translate(-500 -300)`)}
 function selectNode(id){const z=parseNodeId(id);if(!z)return;const info=nodeInfo(z.q,z.r),un=isUnlocked(id),avail=!un&&adjacentUnlocked(z.q,z.r),canLevel=p.lv>=info.reqLv,canMat=p.materials>=info.reqMat,canBuy=p.num>=info.cost;let req=`<p>距離：${info.d}　必要数字：${fmt(info.cost)}</p>`;if(info.reqLv>1||info.reqMat>0)req+=`<p>高位ノード条件：Lv.${info.reqLv} 以上 ／ 素材 💠 ${info.reqMat} 個（所持 ${p.materials}）</p>`;$('nodeInfo').innerHTML=`<h3>${info.icon} ${info.name} ${un?'（解放済み）':''}</h3><p>${info.desc}</p>${req}${!un&&avail?`<button id="unlockNode" ${(!canBuy||!canLevel||!canMat)?'disabled':''}>${!canBuy?'数字不足':!canLevel?'レベル不足':!canMat?'素材不足':'ノードを解放'}</button>`:!un?'<p class="muted">まず隣接するノードを解放してください。</p>':''}`;let b=$('unlockNode');if(b)b.onclick=()=>{if(p.num<info.cost||p.lv<info.reqLv||p.materials<info.reqMat||!adjacentUnlocked(z.q,z.r))return;p.num-=info.cost;p.materials-=info.reqMat;p.treeUnlocked.push(id);if(info.type==='defense')p.hp=Math.min(maxHP(),p.hp+10);save();treeRender();selectNode(id);topStats();notify(`${info.name}ノードを解放！`)};}
 function setupTree(){const svg=$('treeSvg');if(!svg)return;treeRender();const zoom=(factor)=>{treeScale=clamp(treeScale*factor,.35,2.5);applyTreeTransform()};$('zoomIn').onclick=()=>zoom(1.2);$('zoomOut').onclick=()=>zoom(1/1.2);const reset=()=>{treeScale=1;treePan={x:0,y:0};applyTreeTransform()};$('zoomReset').onclick=reset;$('centerTree').onclick=reset;svg.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1.12:1/1.12)},{passive:false});svg.addEventListener('pointerdown',e=>{if(e.target.closest('[data-node]'))return;drag={x:e.clientX,y:e.clientY,px:treePan.x,py:treePan.y,moved:false};svg.classList.add('dragging');svg.setPointerCapture(e.pointerId)});svg.addEventListener('pointermove',e=>{if(!drag)return;let dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;let rect=svg.getBoundingClientRect();treePan.x=drag.px+dx*1000/rect.width;treePan.y=drag.py+dy*600/rect.height;applyTreeTransform()});svg.addEventListener('pointerup',()=>{drag=null;svg.classList.remove('dragging')});svg.addEventListener('pointercancel',()=>{drag=null;svg.classList.remove('dragging')});}
