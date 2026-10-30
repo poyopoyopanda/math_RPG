@@ -70,7 +70,74 @@ function notify(t){noticeText=t;$('notice').textContent=t;if(noticeTimer)clearTi
 function levelCheck(){let up=0,got=0;while(p.exp>=needExp()&&p.num>=needNum()&&p.lv<9999){p.exp-=needExp();p.num-=needNum();p.lv++;let materialGain=1+Math.floor(p.lv/10);p.materials+=materialGain;got+=materialGain;p.hp=Math.min(maxHP(),p.hp+18);p.mp=Math.min(maxMP(),p.mp+8);up++}if(up)notify(`レベルアップ！ Lv.${p.lv}。素材 +${got}（合計 ${p.materials}）`);p.hp=clamp(p.hp,0,maxHP());p.mp=clamp(p.mp,0,maxMP())}
 function nav(){const items=[['home','🏠 ホーム'],['battle','⚔️ 戦闘'],['numbers','📊 数字生産'],['shop','🛒 ショップ'],['skills','🕸️ スキル網'],['rebirth','♻️ 転生']];$('nav').innerHTML=items.map(([id,t])=>`<button data-page="${id}" class="${page===id?'active':''}">${t}</button>`).join('');$('nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{page=b.dataset.page;render()})}
 function topStats(){$('topStats').innerHTML=`<div class="stat"><span class="muted">レベル</span><br><b>Lv.${p.lv}</b></div><div class="stat"><span class="muted">HP</span><br><b>${fmt(p.hp)} / ${fmt(maxHP())}</b></div><div class="stat"><span class="muted">MP</span><br><b>${fmt(p.mp)} / ${fmt(maxMP())}</b></div><div class="stat"><span class="muted">所持数字</span><br><b>${fmt(p.num)}</b></div><div class="stat"><span class="muted">素材</span><br><b>💠 ${fmt(p.materials)}</b></div><div class="stat"><span class="muted">ゴールド</span><br><b>🪙 ${fmt(p.gold)}</b></div><div class="stat"><span class="muted">毎秒生産</span><br><b>+${fmt(rate())}/秒</b></div>`}
-function home(){let ex=needExp(),nu=needNum();return `<div class="panel"><h3>冒険者ステータス</h3><div id="expLabel">経験値：${fmt(p.exp)} / ${fmt(ex)}</div><div class="bar"><i id="expProgress" style="width:${clamp(p.exp/ex*100,0,100)}%"></i></div><div id="numLabel">次のレベルに必要な数字：${fmt(nu)}</div><div class="bar"><i id="numProgress" style="width:${clamp(p.num/nu*100,0,100)}%"></i></div><div class="muted">レベルアップには経験値と数字の両方が必要です。初期所持数字は0。初回開始時は数字0・ゴールド150。バー購入前は低速の基礎生産だけが動きます。レベルアップ時にはスキル網の高位ノードに使う素材も獲得します。</div></div><div class="panel"><h3>🏭 数字生産ライン</h3><div class="factory">${p.bars.slice(0,80).map(b=>{let t=tierInfo[clamp(b.tier,0,3)];return `<div class="factoryBar ${t.cls}" style="height:${clamp(25+b.level*8+b.tier*12,30,95)}px"><span>Lv${b.level}</span></div>`}).join('')||'バーがありません'}</div><p>稼働中：${p.bars.length} 本 / 生産：+${fmt(rate())} 数字/秒</p><button data-go="numbers">バーを購入・強化</button></div><div class="panel"><h3>📜 冒険の記録</h3><div>勝利数：${p.wins}　転生回数：${p.rebirth}　スキル網の解放数：${p.treeUnlocked.length}</div><p class="muted">敵を倒して経験値とゴールドを獲得し、スキル網を広げて強化しよう。</p><button data-go="battle">戦闘へ進む</button></div>`}
+function home(){let ex=needExp(),nu=needNum();return `<div class="panel"><h3>冒険者ステータス</h3><div id="expLabel">経験値：${fmt(p.exp)} / ${fmt(ex)}</div><div class="bar"><i id="expProgress" style="width:${clamp(p.exp/ex*100,0,100)}%"></i></div><div id="numLabel">次のレベルに必要な数字：${fmt(nu)}</div><div class="bar"><i id="numProgress" style="width:${clamp(p.num/nu*100,0,100)}%"></i></div><div class="muted">レベルアップには経験値と数字の両方が必要です。初期所持数字は0。初回開始時は数字0・ゴールド150。バー購入前は低速の基礎生産だけが動きます。レベルアップ時にはスキル網の高位ノードに使う素材も獲得します。<button id="openTutorial">📖 操作説明を見る</button></div></div><div class="panel"><h3>🏭 数字生産ライン</h3><div class="factory">${p.bars.slice(0,80).map(b=>{let t=tierInfo[clamp(b.tier,0,3)];return `<div class="factoryBar ${t.cls}" style="height:${clamp(25+b.level*8+b.tier*12,30,95)}px"><span>Lv${b.level}</span></div>`}).join('')||'バーがありません'}</div><p>稼働中：${p.bars.length} 本 / 生産：+${fmt(rate())} 数字/秒</p><button data-go="numbers">バーを購入・強化</button></div><div class="panel"><h3>📜 冒険の記録</h3><div>勝利数：${p.wins}　転生回数：${p.rebirth}　スキル網の解放数：${p.treeUnlocked.length}</div><p class="muted">敵を倒して経験値とゴールドを獲得し、スキル網を広げて強化しよう。</p><button data-go="battle">戦闘へ進む</button></div>`}
+ let tutorialPage=0;
+
+const tutorialContents=[
+  {
+    title:"基本操作",
+    text:"画面上部のナビゲーションから各機能へ移動できます。ホームでは冒険者の状態を確認できます。"
+  },
+  {
+    title:"冒険者ステータス",
+    text:"レベルアップには経験値と数字の両方が必要です。必要量を満たすとレベルが上がり、HP・MP・素材を獲得します。"
+  },
+  {
+    title:"数字生産",
+    text:"数字は時間経過で自動的に増加します。バーを購入すると生産量が増え、上位バーほど高い生産能力を持ちます。"
+  },
+  {
+    title:"戦闘",
+    text:"敵を選択して戦闘を開始します。問題に正解すると攻撃し、不正解だと敵からダメージを受けます。"
+  },
+  {
+    title:"難易度と出題ジャンル",
+    text:"戦闘前に難易度とジャンルを設定できます。難しい問題ほど正解時の攻撃倍率が高くなります。"
+  },
+  {
+    title:"魔法",
+    text:"火炎魔法・氷結魔法・雷鳴魔法・回復魔法を使用できます。魔法ごとに必要なMPが異なります。"
+  },
+  {
+    title:"ショップとスキル網",
+    text:"ゴールドで装備を購入できます。スキル網では数字を消費して能力を強化できます。高位ノードにはレベルと素材も必要です。"
+  },
+  {
+    title:"転生とセーブ",
+    text:"Lv.100で転生できます。転生すると一部の進行状況がリセットされる代わりに永続ボーナスを獲得します。ゲームデータは自動保存されます。"
+  }
+];
+
+function tutorial(){
+  const t=tutorialContents[tutorialPage];
+  return `<div class="panel">
+    <h3>📖 操作説明：${tutorialPage+1} / ${tutorialContents.length}</h3>
+    <h2>${t.title}</h2>
+    <p>${t.text}</p>
+    <div class="bar"><i style="width:${(tutorialPage+1)/tutorialContents.length*100}%"></i></div>
+    <div class="row">
+      <button id="tutorialPrev" ${tutorialPage===0?'disabled':''}>前へ</button>
+      <button id="tutorialNext">${tutorialPage===tutorialContents.length-1?'完了':'次へ'}</button>
+      <button id="tutorialHome">ホームへ戻る</button>
+    </div>
+  </div>`;
+}
+ let tutorialPrev=$('tutorialPrev');
+if(tutorialPrev)tutorialPrev.onclick=()=>{if(tutorialPage>0){tutorialPage--;render()}};
+
+let tutorialNext=$('tutorialNext');
+if(tutorialNext)tutorialNext.onclick=()=>{
+  if(tutorialPage<tutorialContents.length-1){
+    tutorialPage++;
+    render();
+  }else{
+    page='home';
+    render();
+  }
+};
+
+let tutorialHome=$('tutorialHome');
+if(tutorialHome)tutorialHome.onclick=()=>{page='home';render()};
 function numbers(){let next=p.bars.length+1;return `<div class="panel"><h3>🏭 バー生産工場</h3><p>バーを買うと工場に表示され、毎秒の数字生産量が増加します。高 tier のバーほど生産量が大きくなります。</p><div class="factory">${p.bars.slice(0,100).map(b=>{let t=tierInfo[clamp(b.tier,0,3)];return `<div class="factoryBar ${t.cls}" style="height:${clamp(25+b.level*8+b.tier*12,30,100)}px"><span>${t.name.replace('バー','')} Lv${b.level}</span></div>`}).join('')||'<span class="muted">まだバーはありません。数字を貯めて最初のバーを購入しよう。</span>'}</div><div class="stats"><div class="stat">バー本数<br><b>${p.bars.length}</b></div><div class="stat">毎秒生産<br><b>+${fmt(rate())}</b></div><div class="stat">レベルアップ素材<br><b>💠 ${fmt(p.materials)}</b></div><div class="stat">合計強化段階<br><b>${p.bars.reduce((s,b)=>s+b.level-1,0)}</b></div></div></div><div class="cards">${tierInfo.map((t,i)=>{let c=tierCost(i);return `<div class="card"><h3>${['🔹','🔷','🟠','💗'][i]} ${t.name}</h3><p>基本生産：+${fmt(t.base)}/秒</p><p>購入費用：${fmt(c)} 数字</p><p class="muted">同種を購入するほど費用上昇</p><button data-buybar="${i}" ${p.num<c?'disabled':''}>購入する</button></div>`}).join('')}</div><div class="panel"><h3>バーを強化</h3><p>全てのバーのレベルを1上げます。レベルが高いほど各バーの生産量が増えます。</p><p>費用：${fmt(upgradeCost())} 数字</p><button data-upgradebar ${!p.bars.length||p.num<upgradeCost()?'disabled':''}>全バーを強化</button></div>`}
 function upgradeCost(){return Math.floor(80*Math.pow(1.5,p.bars.reduce((s,b)=>s+b.level-1,0)))}
 function shop(){const slotNames={weapon:'武器',armor:'防具',exp:'経験装備',mana:'魔力装備'};return `<div class="panel"><h3>🛒 冒険者ショップ</h3><p>以前の装備ショップを復元しました。ゴールドで装備を購入し、各カテゴリにつき1つ装備できます。購入済みの装備は何度でも付け替えられます。</p><div class="stats"><div class="stat">所持ゴールド<br><b>🪙 ${fmt(p.gold)}</b></div><div class="stat">武器<br><b>${equippedItem('weapon')?.name||'未装備'}</b></div><div class="stat">防具<br><b>${equippedItem('armor')?.name||'未装備'}</b></div><div class="stat">経験装備<br><b>${equippedItem('exp')?.name||'未装備'}</b></div><div class="stat">魔力装備<br><b>${equippedItem('mana')?.name||'未装備'}</b></div></div></div><div class="cards">${gearItems.map(it=>{const owned=p.ownedGear.includes(it.id),equipped=p.equippedGear[it.slot]===it.id;return `<div class="card"><h3>🛡️ ${it.name}</h3><p>${it.desc}</p><p class="muted">カテゴリ：${slotNames[it.slot]}</p><p>価格：🪙 ${it.price}</p>${!owned?`<button data-buygear="${it.id}" ${p.gold<it.price?'disabled':''}>購入する</button>`:`<button data-equipgear="${it.id}" ${equipped?'disabled':''}>${equipped?'装備中':'装備する'}</button>`}</div>`}).join('')}</div><div class="panel"><h3>装備効果</h3><p>武器：攻撃魔法・正解攻撃のダメージ補正に反映。</p><p>防具：敵から受けるダメージを割合軽減。</p><p>経験装備：戦闘勝利時の獲得EXPに反映。</p><p>魔力装備：魔法の必要MPを固定値で軽減（最低1MP）。</p></div>`}
@@ -204,8 +271,8 @@ function applyTreeTransform(){let w=$('treeWorld');if(w)w.setAttribute('transfor
 function selectNode(id){const z=parseNodeId(id);if(!z)return;const info=nodeInfo(z.q,z.r),un=isUnlocked(id),avail=!un&&adjacentUnlocked(z.q,z.r),canLevel=p.lv>=info.reqLv,canMat=p.materials>=info.reqMat,canBuy=p.num>=info.cost;let req=`<p>距離：${info.d}　必要数字：${fmt(info.cost)}</p>`;if(info.reqLv>1||info.reqMat>0)req+=`<p>高位ノード条件：Lv.${info.reqLv} 以上 ／ 素材 💠 ${info.reqMat} 個（所持 ${p.materials}）</p>`;$('nodeInfo').innerHTML=`<h3>${info.icon} ${info.name} ${un?'（解放済み）':''}</h3><p>${info.desc}</p>${req}${!un&&avail?`<button id="unlockNode" ${(!canBuy||!canLevel||!canMat)?'disabled':''}>${!canBuy?'数字不足':!canLevel?'レベル不足':!canMat?'素材不足':'ノードを解放'}</button>`:!un?'<p class="muted">まず隣接するノードを解放してください。</p>':''}`;let b=$('unlockNode');if(b)b.onclick=()=>{if(p.num<info.cost||p.lv<info.reqLv||p.materials<info.reqMat||!adjacentUnlocked(z.q,z.r))return;p.num-=info.cost;p.materials-=info.reqMat;p.treeUnlocked.push(id);if(info.type==='defense')p.hp=Math.min(maxHP(),p.hp+10);save();treeRender();selectNode(id);topStats();notify(`${info.name}ノードを解放！`)};}
 function setupTree(){const svg=$('treeSvg');if(!svg)return;treeRender();const zoom=(factor)=>{treeScale=clamp(treeScale*factor,.35,2.5);applyTreeTransform()};$('zoomIn').onclick=()=>zoom(1.2);$('zoomOut').onclick=()=>zoom(1/1.2);const reset=()=>{treeScale=1;treePan={x:0,y:0};applyTreeTransform()};$('zoomReset').onclick=reset;$('centerTree').onclick=reset;svg.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1.12:1/1.12)},{passive:false});svg.addEventListener('pointerdown',e=>{if(e.target.closest('[data-node]'))return;drag={x:e.clientX,y:e.clientY,px:treePan.x,py:treePan.y,moved:false};svg.classList.add('dragging');svg.setPointerCapture(e.pointerId)});svg.addEventListener('pointermove',e=>{if(!drag)return;let dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)drag.moved=true;let rect=svg.getBoundingClientRect();treePan.x=drag.px+dx*1000/rect.width;treePan.y=drag.py+dy*600/rect.height;applyTreeTransform()});svg.addEventListener('pointerup',()=>{drag=null;svg.classList.remove('dragging')});svg.addEventListener('pointercancel',()=>{drag=null;svg.classList.remove('dragging')});}
 function rebirth(){let req=100;return `<div class="panel"><h3>♻️ 転生システム</h3><p>レベル${req}で転生できます。レベル・経験値・数字・ゴールド・バーは初期化されますが、転生ボーナスとスキル網は維持されます。</p><div class="stats"><div class="stat">現在のレベル<br><b>Lv.${p.lv}</b></div><div class="stat">転生回数<br><b>${p.rebirth}</b></div><div class="stat">転生ボーナス<br><b>生産 +${p.rebirth*15}% / EXP +${p.rebirth*5}%</b></div></div><p>転生すると最大HP・MPと攻撃力も上がります。</p><button id="rebirthBtn" ${p.lv<req?'disabled':''}>${p.lv<req?'Lv.100で転生可能':'転生する'}</button></div>`}
-function render(){topStats();nav();let s=$('screen');if(page==='home')s.innerHTML=home();else if(page==='numbers')s.innerHTML=numbers();else if(page==='shop')s.innerHTML=shop();else if(page==='battle')s.innerHTML=battle();else if(page==='skills')s.innerHTML=skills();else s.innerHTML=rebirth();bindScreen();if(page==='skills')setupTree()}
-function bindScreen(){safebind('data-go',b=>{page=b.dataset.go;render()});safebind('data-buygear',b=>{const it=gearItems.find(x=>x.id===b.dataset.buygear);if(!it||p.gold<it.price||p.ownedGear.includes(it.id))return;p.gold-=it.price;p.ownedGear.push(it.id);p.equippedGear[it.slot]=it.id;save();render();notify(`${it.name}を購入し、装備した！`)});safebind('data-equipgear',b=>{const it=gearItems.find(x=>x.id===b.dataset.equipgear);if(!it||!p.ownedGear.includes(it.id))return;p.equippedGear[it.slot]=it.id;save();render();notify(`${it.name}を装備した！`)});safebind('data-buybar',b=>{let tier=Number(b.dataset.buybar),info=tierInfo[tier],cost=tierCost(tier);if(p.num<cost)return;p.num-=cost;p.bars.push({id:p.nextBarId++,tier,level:1});save();render();notify(`${info.name}を購入！ 生産ラインに追加された。`)});safebind('data-upgradebar',()=>{let c=upgradeCost();if(!p.bars.length||p.num<c)return;p.num-=c;p.bars.forEach(b=>b.level++);save();render();notify('全バーを強化しました！')});safebind('data-enemy',b=>startBattle(b.dataset.enemy));safebind('data-magic',b=>magic(b.dataset.magic));let form=$('answerForm');if(form)form.onsubmit=e=>{e.preventDefault();let input=$('answerInput');answer(input.value)};let leave=$('leaveBattle');if(leave)leave.onclick=()=>{enemy=null;q=null;page='battle';render()};let rb=$('rebirthBtn');if(rb)rb.onclick=()=>{if(p.lv<100)return;if(!confirm('転生しますか？ レベル・数字・ゴールド・バーがリセットされます。'))return;p.rebirth++;p.lv=1;p.exp=0;p.num=0;p.gold=0;p.materials=0;p.bars=[];p.nextBarId=1;p.hp=maxHP();p.mp=maxMP();enemy=null;q=null;save();page='home';render();notify('転生完了！ 永続ボーナスを獲得しました。')}}
+function render(){topStats();nav();let s=$('screen');if(page==='home')s.innerHTML=home();else if(page==='numbers')s.innerHTML=numbers();else if(page==='shop')s.innerHTML=shop();else if(page==='battle')s.innerHTML=battle();else if(page==='skills')s.innerHTML=skills();else if(page==='tutorial')s.innerHTML=tutorial();else s.innerHTML=rebirth();bindScreen();if(page==='skills')setupTree()}
+function bindScreen(){let tutorialBtn=$('openTutorial');if(tutorialBtn)tutorialBtn.onclick=()=>{page='tutorial';render()};safebind('data-go',b=>{page=b.dataset.go;render()});safebind('data-buygear',b=>{const it=gearItems.find(x=>x.id===b.dataset.buygear);if(!it||p.gold<it.price||p.ownedGear.includes(it.id))return;p.gold-=it.price;p.ownedGear.push(it.id);p.equippedGear[it.slot]=it.id;save();render();notify(`${it.name}を購入し、装備した！`)});safebind('data-equipgear',b=>{const it=gearItems.find(x=>x.id===b.dataset.equipgear);if(!it||!p.ownedGear.includes(it.id))return;p.equippedGear[it.slot]=it.id;save();render();notify(`${it.name}を装備した！`)});safebind('data-buybar',b=>{let tier=Number(b.dataset.buybar),info=tierInfo[tier],cost=tierCost(tier);if(p.num<cost)return;p.num-=cost;p.bars.push({id:p.nextBarId++,tier,level:1});save();render();notify(`${info.name}を購入！ 生産ラインに追加された。`)});safebind('data-upgradebar',()=>{let c=upgradeCost();if(!p.bars.length||p.num<c)return;p.num-=c;p.bars.forEach(b=>b.level++);save();render();notify('全バーを強化しました！')});safebind('data-enemy',b=>startBattle(b.dataset.enemy));safebind('data-magic',b=>magic(b.dataset.magic));let form=$('answerForm');if(form)form.onsubmit=e=>{e.preventDefault();let input=$('answerInput');answer(input.value)};let leave=$('leaveBattle');if(leave)leave.onclick=()=>{enemy=null;q=null;page='battle';render()};let rb=$('rebirthBtn');if(rb)rb.onclick=()=>{if(p.lv<100)return;if(!confirm('転生しますか？ レベル・数字・ゴールド・バーがリセットされます。'))return;p.rebirth++;p.lv=1;p.exp=0;p.num=0;p.gold=0;p.materials=0;p.bars=[];p.nextBarId=1;p.hp=maxHP();p.mp=maxMP();enemy=null;q=null;save();page='home';render();notify('転生完了！ 永続ボーナスを獲得しました。')}}
 function safebind(selector,fn){root.querySelectorAll(`[${selector}]`).forEach(b=>b.onclick=()=>fn(b))}
 $('saveBtn').onclick=()=>{save(true);notify('セーブしました。')};window.addEventListener('pagehide',()=>save(true));$('resetBtn').onclick=()=>{if(!confirm('セーブデータを初期化しますか？ この操作は元に戻せません。'))return;try{localStorage.removeItem(STORAGE);localStorage.removeItem(previousStorage);localStorage.removeItem(olderStorage);localStorage.removeItem(oldestStorage)}catch(e){}p=fresh();enemy=null;q=null;page='home';save();render();notify('データを初期化しました。')};
 // Offline production (maximum 24 hours).
